@@ -44,7 +44,7 @@ urlextract
 
 ```bash
 git clone https://github.com/ammaarKhan13/Whatsapp-Chat-Analyzer-with-Sentiment-Analysis
-cd whatsapp-chat-analyzer
+cd Whatsapp-Chat-Analyzer-with-Sentiment-Analysis
 ```
 
 2. Install the required Python packages.
