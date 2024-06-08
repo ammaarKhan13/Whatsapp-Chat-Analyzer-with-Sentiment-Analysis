@@ -16,6 +16,10 @@ This project is a WhatsApp chat analysis tool that provides insights and sentime
 - [License](#license)
 
 
+## Live Demo
+Check out the live demo of the app: [WhatsApp Chat Analyzer](https://whatsapp-chat-analyzer-with-sentiment-analysis.streamlit.app/)
+
+
 ## Installation
 
 To use this project, you need to have Python installed on your machine. You can install the necessary dependencies using `pip`:
