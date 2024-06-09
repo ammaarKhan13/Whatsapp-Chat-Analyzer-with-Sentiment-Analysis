@@ -139,10 +139,19 @@ if uploaded_file is not None:
             st.pyplot(fig)
 
         # Sentiment analysis
-        st.subheader('Sentiment Analysis')
+        st.subheader('Sentiment Analysis using VADER')
         sentiment_df = helper.sentiment_analysis(selected_user, df)
-        st.write(sentiment_df)
+        st.write(sentiment_df[['user', 'message', 'sentiment']])
 
-    # Display overall sentiment summary
+        # Display overall sentiment summary
+        st.subheader('Sentiment Summary')
+        st.write(sentiment_df['sentiment'].describe())
+
+        # Sentiment analysis
+        st.subheader('Sentiment Analysis using transformer')
+        sentiment_df = helper.transformer(selected_user, df)
+        st.write(sentiment_df[['user', 'message', 'sentiment']])
+
+        # Display overall sentiment summary
         st.subheader('Sentiment Summary')
         st.write(sentiment_df['sentiment'].describe())
