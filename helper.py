@@ -6,7 +6,9 @@ import emoji
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 import nltk
 nltk.download('vader_lexicon')
+
 from transformers import pipeline
+sentiment_pipeline = pipeline("sentiment-analysis", model="cardiffnlp/twitter-roberta-base-sentiment")
 
 extract = URLExtract()
 
@@ -155,6 +157,6 @@ def sentiment_analysis(selected_user, df):
 def transformer(selected_user,df):
     if selected_user != 'Overall':
         df = df[df['user'] == selected_user]
-    sent_pipeline=pipeline('sentiment_analysis',)
-    df['sentiment'] = df['message'].apply(lambda x: sent_pipeline(x)[0]['label'])
+
+    df['sentiment'] = df['message'].apply(lambda x: sentiment_pipeline(x)[0]['label'])
     return df
