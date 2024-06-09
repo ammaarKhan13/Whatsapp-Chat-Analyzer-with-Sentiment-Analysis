@@ -148,7 +148,7 @@ if uploaded_file is not None:
         st.write(sentiment_df['sentiment'].describe())
 
         # Sentiment analysis
-        st.subheader('Sentiment Analysis using transformer')
+        st.subheader('Sentiment Analysis using RoBERTa')
         sentiment_df = helper.transformer(selected_user, df)
         st.write(sentiment_df[['user', 'message', 'sentiment']])
 
