@@ -5,12 +5,17 @@ from collections import Counter
 import emoji
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 import nltk
-nltk.download('vader_lexicon')
-
-from transformers import pipeline
-sentiment_pipeline = pipeline("sentiment-analysis", model="cardiffnlp/twitter-roberta-base-sentiment")
+from transformers import pipeline, AutoTokenizer, AutoModelForSequenceClassification
+import torch
 
 extract = URLExtract()
+
+# Initialize tokenizer and model
+tokenizer = AutoTokenizer.from_pretrained("cardiffnlp/twitter-roberta-base-sentiment")
+model = AutoModelForSequenceClassification.from_pretrained("cardiffnlp/twitter-roberta-base-sentiment")
+
+# Initialize the sentiment analysis pipeline with RoBERTa
+sentiment_pipeline = pipeline("sentiment-analysis", model=model, tokenizer=tokenizer)
 
 def fetch_stats(selected_user,df):
 
@@ -153,10 +158,20 @@ def sentiment_analysis(selected_user, df):
     df['sentiment'] = df['message'].apply(lambda x: sia.polarity_scores(x)['compound'])
 
     return df
-    
+
 def transformer(selected_user,df):
     if selected_user != 'Overall':
         df = df[df['user'] == selected_user]
+    
+    def get_sentiment(text):
+        encoded_input = tokenizer(text, return_tensors='pt', padding=True, truncation=True, max_length=512)
+        output = model(**encoded_input)
+        scores = output[0][0].detach().numpy()
+        scores = torch.softmax(torch.tensor(scores), dim=0).numpy()
+        sentiments = ['Negative', 'Neutral', 'Positive']
+        sentiment = sentiments[scores.argmax()]
+        return sentiment
 
-    df['sentiment'] = df['message'].apply(lambda x: sentiment_pipeline(x)[0]['label'])
+    df['sentiment'] = df['message'].apply(get_sentiment)    
     return df
+    
